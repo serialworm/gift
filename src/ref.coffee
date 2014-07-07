@@ -40,7 +40,12 @@ exports.Head = class Head extends Ref
   @current: (repo, callback) ->
     fs.readFile "#{repo.dot_git}/HEAD", (err, data) ->
       return callback err if err
-      [m, branch] = /ref: refs\/heads\/([^\s]+)/.exec data
+
+      ref = /ref: refs\/heads\/([^\s]+)/.exec data
+      # When the current branch check out to a commit, instaed of a branch name.
+      return callback new Error "Current branch is not a valid branch." if !ref
+
+      [m, branch] = ref
       fs.readFile "#{repo.dot_git}/refs/heads/#{branch}", (err, id) ->
         Commit.find repo, id, (err, commit) ->
           return callback err if err
