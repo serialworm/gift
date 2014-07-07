@@ -11,3 +11,4 @@ module.exports =
   status:    git("#{dir}/status", true)
   submodule: git("#{dir}/submodule", true)
   tagged:    git("#{dir}/tagged", true)
+  noBranch:  git("#{dir}/no_branch", true)
