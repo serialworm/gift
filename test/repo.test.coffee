@@ -477,6 +477,15 @@ describe "Repo", ->
           done()
 
 
+    describe "current branch is (no branch)", ->
+      repo = fixtures.noBranch
+      it "passes an error", (done) ->
+        repo.branch (err, b) ->
+          should.exist err
+          should.not.exist b
+          done()
+
+
   describe "#delete_branch", ->
     describe "a branch that does not exist", ->
       repo = fixtures.branched
