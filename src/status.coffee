@@ -3,8 +3,9 @@
 # repo     - A Repo.
 # callback - Receives `(err, status)`
 #
-module.exports = S = (repo, callback) ->
-  repo.git "status --porcelain -u", (err, stdout, stderr) ->
+module.exports = S = (repo, options, callback) ->
+  console.log options
+  repo.git "status --porcelain", options, (err, stdout, stderr) ->
     status = new Status repo
     status.parse stdout
     return callback err, status
