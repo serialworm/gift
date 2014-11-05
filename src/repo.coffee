@@ -198,6 +198,17 @@ module.exports = class Repo
     , (err, stdout, stderr) ->
       callback err
 
+  # Public: Delete a remote URL.
+  #
+  # name     - String name of the remote.
+  # url      - String url of the remote.
+  # callback - Receives `(err)`
+  #
+  remote_delete_url: (name, url, callback) ->
+    @git "remote set-url", {}, ["--delete", name, url]
+    , (err, stdout, stderr) ->
+      callback err
+
   # Public: Remove a remote.
   #
   # name     - String name of the remote.
