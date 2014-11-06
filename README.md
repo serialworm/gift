@@ -115,6 +115,12 @@ Get the string names of each of the remotes.
 ### `Repo#remote_add(name, url, callback)`
 Equivalent to `git remote add <name> <url>`.
 
+### `Repo#remote_add_url(name, url, callback)`
+Equivalent to `git remote set-url --add <name> <url>`.
+
+### `Repo#remote_delete_url(name, url, callback)`
+Equivalent to `git remote set-url --delete <name> <url>`.
+
 ### `Repo#remote_remove(name, callback)`
 Remove a remote.
 
