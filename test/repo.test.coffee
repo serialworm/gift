@@ -494,6 +494,77 @@ describe "Repo", ->
           should.exist err
           done()
 
+  describe "#clean", ->
+    repo    = null
+    git_dir = __dirname + "/fixtures/junk_clean"
+    status  = null
+    file    = "bla.txt"
+    dir     = 'blah'
+
+    # given a fresh new repo
+    beforeEach (done) ->
+      status = null
+      fs.remove git_dir, (err) ->
+        return done err if err
+        fs.copy "#{__dirname}/fixtures/clean", "#{git_dir}", (err) ->
+          return done err if err
+          fs.rename "#{git_dir}/git.git", "#{git_dir}/.git", (err) ->
+            return done err if err
+            git.init git_dir, (err) ->
+              repo = git git_dir
+              fs.writeFile "#{git_dir}/#{file}", "hello", (err) ->
+                return done err if err?
+                fs.mkdir "#{git_dir}/#{dir}", (err) ->
+                  done err
+
+    after (done) ->
+      fs.remove git_dir, (err) ->
+        done err
+
+    describe "clean with no args shouldn't do anything", ->
+      beforeEach (done) ->
+        repo.clean ->
+          repo.status (err, _status) ->
+            status = _status
+            done err
+
+      it "leaves the untracked file alone", ->
+        fs.existsSync("#{git_dir}/iamuntracked").should.be.true
+        fs.existsSync("#{git_dir}/iamuntracked/untracked.txt").should.be.true
+        fs.existsSync("#{git_dir}/#{dir}").should.be.true
+        status.files.should.have.a.property file
+        status.files[file].staged.should.be.false
+        status.files[file].tracked.should.be.false
+        status.files[file].should.not.have.a.property 'type'
+
+    describe "clean --force", ->
+      beforeEach (done) ->
+        repo.clean {force: true}, ->
+          repo.status (err, _status) ->
+            status = _status
+            done err
+
+      it "should remove the file but not the directory", ->
+        status.files.should.not.have.a.property file
+        fs.existsSync("#{git_dir}/#{dir}").should.be.true
+        fs.existsSync("#{git_dir}/iamuntracked").should.be.true
+
+        # git does not clean untracked files in untracked directories
+        fs.existsSync("#{git_dir}/iamuntracked/untracked.txt").should.be.true
+
+    describe "clean -df", ->
+      beforeEach (done) ->
+        repo.clean {force: true, d: true}, ->
+          repo.status (err, _status) ->
+            status = _status
+            done err
+
+      it "removes the file and directory", ->
+        status.files.should.not.have.a.property file
+        fs.existsSync("#{git_dir}/#{dir}").should.be.false
+        fs.existsSync("#{git_dir}/iamuntracked").should.be.false
+        fs.existsSync("#{git_dir}/iamuntracked/untracked.txt").should.be.false
+
   describe "#reset", ->
     repo    = null
     git_dir = __dirname + "/fixtures/junk_reset"

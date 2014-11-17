@@ -355,6 +355,19 @@ module.exports = class Repo
   checkout: (treeish, callback) ->
     @git "checkout", {}, treeish, callback
 
+  # Public: Clean the git repo by removing untracked files
+  #
+  # options   - The {Object} containing any of the options available to git clean:
+  #   :force  - {Boolean) In the default repo config, clean will not take effect unless this option is given.
+  #   :d      - {Boolean) also removes untracked directories
+  #   :n      - {Boolean) Dry run - don't actually delete, just report what would be deleted
+  #   :quiet  - {Boolean) only report errors
+  # callback  - The {Function} to callback.
+  #
+  clean: (options, callback) ->
+    options ?= {}
+    @git "clean", options, callback
+
   # Public: Reset the git repo.
   #
   # treeish  - The {String} to reset to.
