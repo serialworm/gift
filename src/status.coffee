@@ -4,7 +4,6 @@
 # callback - Receives `(err, status)`
 #
 module.exports = S = (repo, options, callback) ->
-  console.log options
   repo.git "status --porcelain", options, (err, stdout, stderr) ->
     status = new Status repo
     status.parse stdout
