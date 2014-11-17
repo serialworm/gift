@@ -136,8 +136,10 @@ Equivalent to `git remote set-url --delete <name> <url>`.
 with branch parameter specified:
 `git push <name> <branch>`
 
-### `Repo#status(callback)`
-Uses `--porcelain` to parse repository status in a way that is agnostic of system language. The callback receives `(err, status)`. See below for a definition of what `status` is.
+### `Repo#status([options, ]callback)`
+Uses `--porcelain` to parse repository status in a way that is agnostic of system language.
+`options` is a string of any other options you'd like to pass to the status command.  For example, the `-u` option will list each file in an untracked directory rather than simply listing the directory itself.
+ The callback receives `(err, status)`. See below for a definition of what `status` is.
 
 ### `Repo#config(callback)`
 `git config` parsed as a simple, one-level object. The callback receives `(err, config)`.

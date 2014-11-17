@@ -271,8 +271,9 @@ module.exports = class Repo
   #
   # callback - Receives `(err, status)`
   #
-  status: (callback) ->
-    return Status(this, callback)
+  status: (options, callback) ->
+    [options, callback] = [callback, options] if !callback;
+    return Status(this, options, callback)
 
   # Public: Show information about files in the index and the
   #         working tree.
