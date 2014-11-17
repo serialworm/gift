@@ -187,6 +187,16 @@ module.exports = class Repo
     , (err, stdout, stderr) ->
       callback err
 
+  # Public: Remove a remote.
+  #
+  # name     - String name of the remote.
+  # callback - Receives `(err)`
+  #
+  remote_remove: (name, callback) ->
+    @git "remote", {}, ["rm", name]
+    , (err, stdout, stderr) ->
+      callback err
+
   # Public: Add a remote URL.
   #
   # name     - String name of the remote.
@@ -198,6 +208,17 @@ module.exports = class Repo
     , (err, stdout, stderr) ->
       callback err
 
+  # Public: Set a remote URL.
+  #
+  # name     - String name of the remote.
+  # url      - String url to set in the remote.
+  # callback - Receives `(err)`.
+  #
+  remote_set_url: (name, url, callback) ->
+    @git "remote set-url", {}, [name, url]
+    , (err, stdout, stderr) ->
+      callback err
+
   # Public: Delete a remote URL.
   #
   # name     - String name of the remote.
@@ -206,16 +227,6 @@ module.exports = class Repo
   #
   remote_delete_url: (name, url, callback) ->
     @git "remote set-url", {}, ["--delete", name, url]
-    , (err, stdout, stderr) ->
-      callback err
-
-  # Public: Remove a remote.
-  #
-  # name     - String name of the remote.
-  # callback - Receives `(err)`
-  #
-  remote_remove: (name, callback) ->
-    @git "remote", {}, ["rm", name]
     , (err, stdout, stderr) ->
       callback err
 
